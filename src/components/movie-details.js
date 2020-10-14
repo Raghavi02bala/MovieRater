@@ -4,31 +4,31 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 function MovieDetails(props) {
 
-    const mov = props.movie;
+    let mov = props.movie;
 
     const [highlighted, setHighlighted] = useState(-1);
+
 
     const highlightRate = (high) => evt => {
         setHighlighted(high);
     }
 
     const rateClicked = rate => evt => {
-        fetch(`http://127.0.0.1:8000/api/movies/${mov.id}/`, {
+        fetch(`http://127.0.0.1:8000/api/movies/${mov.id}/rate_movie/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Token 0d7440537cc8285889bd2e8f6cb1dfe528427a89'
             },
-            body: JSON.stringify( { stars: rate + 1 } )
-        }
-        )
+            body: JSON.stringify({ stars: rate + 1 })
+        })
             .then(() => getDetails())
             .then(error => console.log(error))
     }
 
     const getDetails = () => {
         fetch(`http://127.0.0.1:8000/api/movies/${mov.id}/`, {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Token 0d7440537cc8285889bd2e8f6cb1dfe528427a89'
@@ -36,7 +36,7 @@ function MovieDetails(props) {
         }
         )
             .then(resp => resp.json())
-            .then(resp => console.log(resp))
+            .then(resp => props.updateMovie(resp))
             .then(error => console.log(error))
     }
 

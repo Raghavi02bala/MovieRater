@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
 import MovieList from './components/movie-list';
-import MovieDetails from './components/movie-details'
+import MovieDetails from './components/movie-details';
+
 
 function App() {
 
@@ -26,6 +27,10 @@ function App() {
     setSelectedMovie(movie);
   }
 
+  const loadMovie = (movie) =>{
+    setSelectedMovie(movie);
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -33,7 +38,8 @@ function App() {
       </header>
       <div className="layout">
         <MovieList movies={movies} movieClick={movieClick}/>
-        <MovieDetails movie={selectedMovie} />
+        <MovieDetails movie={selectedMovie} updateMovie={loadMovie}/>
+     
       </div>
     </div>
   );
