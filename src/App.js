@@ -1,10 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
+import MovieList from './components/movie-list';
+import MovieDetails from './components/movie-details'
 
 function App() {
 
 
   const [movies, setMovie] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() =>{
     fetch("http://127.0.0.1:8000/api/movies/",{
@@ -19,7 +22,9 @@ function App() {
     .then( error => console.log(error))
   },[])
 
-  
+  const movieClick = (movie) =>{
+    setSelectedMovie(movie);
+  }
 
   return (
     <div className="App">
@@ -27,12 +32,8 @@ function App() {
         <h1>Movie rater</h1>
       </header>
       <div className="layout">
-        <div>
-          { movies.map( movie => {
-          return <h4>{movie.title}</h4>
-        })}
-        </div>
-        <div>Movie details</div>
+        <MovieList movies={movies} movieClick={movieClick}/>
+        <MovieDetails movie={selectedMovie} />
       </div>
     </div>
   );
