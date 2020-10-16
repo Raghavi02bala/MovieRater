@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 function MovieDetails(props) {
-
     let mov = props.movie;
 
     const [highlighted, setHighlighted] = useState(-1);
@@ -70,7 +69,7 @@ function MovieDetails(props) {
                     </div>
                 </div>
             ) :
-                <h2>Click on movies to see detail</h2>
+                null
             }
         </Fragment>
     );
