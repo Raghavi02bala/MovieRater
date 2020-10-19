@@ -17,7 +17,7 @@ function movieList(props) {
 
     const removeClicked = (movie) => {
         API.deleteMovie(movie.id)
-            .then( () => props.removeClicked(movie) )
+            .then( () => props.removeClick(movie) )
             .catch(error => console.log(error))
     }
 

@@ -77,7 +77,7 @@ function App() {
       </header>
       <div className="layout">
         <div>
-          <MovieList movies={movies} movieClickvar={loadMovie} editClicked={editClicked} removeClicked={removeClicked} />
+          <MovieList movies={movies} movieClickvar={loadMovie} editClicked={editClicked} removeClick={removeClicked} />
           <button onClick={newMovie}>New Movie</button>
         </div>
         <MovieDetails movie={selectedMovie} updateMovie={loadMovie} />
