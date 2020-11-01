@@ -3,10 +3,6 @@ import { API } from '../api-services';
 
 function MovieForm(props) {
 
-    // creating ref to print the current value, without storing it in onChange.
-    // let textInput = React.createRef();
-    // let textInp = React.createRef();
-
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
 
@@ -19,16 +15,12 @@ function MovieForm(props) {
         API.updateMovie(props.movie.id, { title, description })
             .then(resp => props.updated(resp))
             .catch(error => console.log(error))
-        // console.log(textInput.current.value);
-        // console.log(textInp.current.value);
     }
 
     const createClicked = () => {
         API.createMovie({ title, description })
             .then(resp => props.movieCreated(resp))
             .catch(error => console.log(error))
-        // console.log(textInput.current.value);
-        // console.log(textInp.current.value);
     }
 
 
@@ -59,7 +51,7 @@ function MovieForm(props) {
                     </div>
                 )
                 :
-                null
+                    null
             }
         </Fragment>
     );
