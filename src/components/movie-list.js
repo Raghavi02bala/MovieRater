@@ -2,9 +2,10 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { API } from '../api-services';
+import { useCookies } from 'react-cookie';
 
-
-function movieList(props) {
+function MovieList(props) {
+    const [token] = useCookies(['mr-token']);
 
     // there is one arrow fn that is gonna return another arrow fn
     const movieClicked = (movie) => event => {
@@ -16,7 +17,7 @@ function movieList(props) {
     }
 
     const removeClicked = (movie) => {
-        API.deleteMovie(movie.id)
+        API.deleteMovie(movie.id, token['mr-token'])
             .then( () => props.removeClick(movie) )
             .catch(error => console.log(error))
     }
@@ -39,4 +40,4 @@ function movieList(props) {
     );
 }
 
-export default movieList;
+export default MovieList;

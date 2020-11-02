@@ -3,9 +3,11 @@ import './App.css';
 import MovieList from './components/movie-list';
 import MovieDetails from './components/movie-details';
 import MovieForm from "./components/movie-form";
+import { useCookies } from 'react-cookie';
 
 function App() {
 
+  const [token] = useCookies(['mr-token']);
 
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -16,7 +18,7 @@ function App() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Token 0d7440537cc8285889bd2e8f6cb1dfe528427a89'
+        'Authorization': `Token ${token['mr-token']}`
       }
     })
       .then(resp => resp.json())
@@ -24,13 +26,10 @@ function App() {
       .then(error => console.log(error))
   }, [])
 
-  // const movieClick = (movie) => {
-  //   setSelectedMovie(movie);
-  //   setEditedMovie(null);
-  // }
-
-  // both movieClick and loadMovie are literally same, we don't have to rewrite in hooks
-  // so we're passing loadMovie for both. But the above movieClick works fine only.
+  useEffect(() => {
+    console.log(token);
+    if (!token['mr-token']) window.location.href = '/';
+  }, [token])
 
   const loadMovie = (movie) => {
     setSelectedMovie(movie);
@@ -53,20 +52,20 @@ function App() {
     })
     setMovies(newMovies)
   }
-  
+
   const newMovie = () => {
-    setEditedMovie({title: '', description: ''});
-    setSelectedMovie(null);    
+    setEditedMovie({ title: '', description: '' });
+    setSelectedMovie(null);
   }
 
   const movieCreated = (movie) => {
-   const newMovies = [...movies, movie];
-   setMovies(newMovies);    
+    const newMovies = [...movies, movie];
+    setMovies(newMovies);
   }
 
   const removeClicked = (movie) => {
     // i am copying the movies, to another var and doing the remove operation there
-    const newMovies = movies.filter( mov => mov.id !== movie.id);
+    const newMovies = movies.filter(mov => mov.id !== movie.id);
     setMovies(newMovies);
   }
 
@@ -81,9 +80,9 @@ function App() {
           <button onClick={newMovie}>New Movie</button>
         </div>
         <MovieDetails movie={selectedMovie} updateMovie={loadMovie} />
-        {editedMovie ? 
-        <MovieForm movie={editedMovie} updated={updatedMovie} movieCreated={movieCreated} /> 
-        : null}
+        {editedMovie ?
+          <MovieForm movie={editedMovie} updated={updatedMovie} movieCreated={movieCreated} />
+          : null}
       </div>
     </div>
   );

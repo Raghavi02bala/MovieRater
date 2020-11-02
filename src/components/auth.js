@@ -1,34 +1,56 @@
-import React, { useEffect, useContext } from 'react';
-import { TokenContext } from '../index';
+import React, { useEffect, useState } from 'react';
+import { API } from '../api-services';
+import { useCookies } from 'react-cookie'
 
 function Auth() {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [isLoginView, setIsLoginView] = useState(true);
 
-    const user = useContext(TokenContext);
+    const [token, setToken] = useCookies(['mr-token']);
+
 
     useEffect(() => {
-        console.log(user.token);
-        if(user.token){
-            window.location.href = '/movies';
-        }
-    }, [user.token])
+        console.log(token);
+        if (token['mr-token']) window.location.href = '/movies';
+    }, [token])
 
-   
+    const loginClicked = () => {
+        API.loginUser({ username, password })
+            .then(resp => setToken('mr-token', resp.token))
+            .then(error => console.log(error))
+    }
+
+    const registerClicked = () => {
+        API.registerUser({ username, password })
+            .then(() => loginClicked())
+            .then(error => console.log(error))
+    }
 
     return (
         <div>
+            {isLoginView ? <h1>Login</h1> : <h1>Register</h1>}
             <label htmlFor="username">Username</label><br />
             <input
                 // ref={textInput}
-                type="text" id="username" placeholder="username" value={user.username}
-                onChange={event => user.setUsername(event.target.value)}
+                type="text" id="username" placeholder="username" value={username}
+                onChange={event => setUsername(event.target.value)}
             /><br />
             <label htmlFor="password">Password</label><br />
             <input
                 // ref={textInp} 
-                type="password" id="password" placeholder="password" value={user.password}
-                onChange={event => user.setPassword(event.target.value)}
+                type="password" id="password" placeholder="password" value={password}
+                onChange={event => setPassword(event.target.value)}
             /><br />
-            <button onClick={user.loginClicked}>Login</button>
+            {isLoginView ?
+                <button onClick={loginClicked}>Login</button>
+                :
+                <button onClick={registerClicked}>Register</button>}
+            {isLoginView ?
+                <p onClick={() => setIsLoginView(false)}>You don't have an account? Register here!</p>
+                :
+                <p onClick={() => setIsLoginView(true)}>You have an account? Login here!</p>
+            }
         </div>
     )
 }
